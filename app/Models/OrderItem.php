@@ -92,5 +92,21 @@ class OrderItem extends Model
 
         return $seller;
     }
+	public function getSlug()
+    {
+        $slug = null;
+        if (!empty($this->webinar_id)) {
+            $slug = $this->webinar->slug;
+        } elseif (!empty($this->promotion_id)) {
+            $slug = $this->promotion->days . " Days Promotion package.";
+        } elseif (!empty($this->reserve_meeting_id)) {
+            $slug = $this->reserveMeeting->days . " Days Meeting package.";
+        } elseif (!empty($this->product_id)) {
+            $slug = $this->product->slug;
+        } elseif (!empty($this->bundle_id)) {
+            $slug = $this->bundle->slug;
+        }
 
+        return $slug;
+    }
 }

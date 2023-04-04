@@ -90,13 +90,16 @@ class PaymentController extends Controller
         try {
             $channelManager = ChannelManager::makeChannel($paymentChannel);
             $redirect_url = $channelManager->paymentRequest($order);
-
+            if ($paymentChannel->class_name == 'Fawaterk') {
+                $order->fawaterk_invoice_id = $redirect_url->invoiceId;
+                $order->save();
+                return Redirect::away($redirect_url->url);
+            }
             if (in_array($paymentChannel->class_name, PaymentChannel::$gatewayIgnoreRedirect)) {
                 return $redirect_url;
             }
 
             return Redirect::away($redirect_url);
-
         } catch (\Exception $exception) {
 
             $toastData = [
